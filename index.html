@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Saving Forms for Later with LocalStorage</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <form id="RandomID" action="/" method="POST">
+        <div class="field">
+            <label for="name">Name</label><input name="name" type="text" id="name">
+        </div>
+        <div class="field">
+            <label for="email">Email</label><input name="email" type="email" id="email">
+        </div>
+        <div class="field">
+            <input name="submit" type="submit" id="submit" value="Submit">
+        </div>
+    </form>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="js/sisyphus/sisyphus.js"></script>
+    <script type="text/javascript">
+        function checkLocalStorageForms(form){
+            // check to see if the form has values saved
+            var values = false;
+            $('input,textarea,select',form).each(function(i, input){
+                if( sisyphus.browserStorage.get(window.location.pathname   + $(form).attr('id') + $(input).attr('name')) !== null){
+                    values = true;    
+                    return false;
+                }
+            });
+            return values;
+        }
+        function removeLocalStorageForms(form){
+            // check to see if the form has values saved
+            $('input,textarea,select',form).each(function(i, input){
+                if( sisyphus.browserStorage.get(window.location.pathname   + $(form).attr('id') + $(input).attr('name')) !== null){
+                    // removes all stored data for the form
+                    sisyphus.browserStorage.remove(window.location.pathname + $(form).attr('id') + $(input).attr('name'));
+                }
+            });
+        }
+        var sisyphus;
+        $(window).load(function() {
+            sisyphus = $.sisyphus();
+            if(checkLocalStorageForms($('#RandomID'))){
+                if(! confirm('We see you ahve previously filled out form information here.  Would you like us to load it in for you?'))
+                    removeLocalStorageForms($('#RandomID'));                
+            }
+            setTimeout(function(){
+                $('#RandomID').sisyphus(
+                    {
+                        name: window.location.pathname,
+                        timeout: 0,
+                        autoRelease: true
+                    }
+                );
+            }, 500);
+        });
+    </script>
+</body>
+</html>
