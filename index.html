@@ -43,7 +43,7 @@
         $(window).load(function() {
             sisyphus = $.sisyphus();
             if(checkLocalStorageForms($('#RandomID'))){
-                if(! confirm('We see you ahve previously filled out form information here.  Would you like us to load it in for you?'))
+                if(! confirm('We see you have previously filled out form information here.  Would you like us to load it in for you?'))
                     removeLocalStorageForms($('#RandomID'));                
             }
             setTimeout(function(){
